@@ -10,6 +10,7 @@ Proyecto base para LAB04–LAB06. No sustituya la comprensión por ejecución me
 uv python install 3.12
 uv sync
 uv run pytest -q
+uv run python scripts/prepare_sentiment_data.py
 uv run python scripts/audit_data.py
 ```
 
