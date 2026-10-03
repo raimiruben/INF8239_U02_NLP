@@ -1,0 +1,3 @@
+name,url,license,language,rows,target,decision
+Candidate_A,https://archive.ics.uci.edu/static/public/331/sentiment+labelled+sentences.zip,CC BY 4.0,en,3000,sentiment (0/1),approved
+Candidate_B,https://archive.ics.uci.edu/static/public/228/sms+spam+collection.zip,CC BY 4.0,en,5574,label (ham/spam),rejected
