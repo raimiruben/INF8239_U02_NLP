@@ -91,4 +91,42 @@ positivo/negativo, sin clase neutral), y cualquier metadato del usuario
   de la que proviene) — esto es una limitación real del dataset, no un
   error de etiquetado, pero debe tenerse en cuenta al interpretar errores
   del modelo en labs posteriores.
-  
+
+
+## Cierre interpretativo
+
+**Resultado principal:** Se localizó, aprobó y auditó el corpus Sentiment
+Labelled Sentences (UCI) para clasificación de sentimiento: 3000 oraciones
+en inglés, etiqueta binaria positivo/negativo, perfectamente balanceada
+(50/50), combinando tres dominios (IMDb, Amazon, Yelp; 1000 oraciones cada
+uno).
+
+**Evidencia de calidad y procedencia:** Fuente oficial UCI con licencia
+CC BY 4.0, procedencia documentada (Kotzias et al., 2015). Hash SHA-256
+registrado para trazabilidad de la descarga. Auditoría: 0 valores nulos,
+17 duplicados (0.57%, documentados), longitud de texto razonable (mediana
+55.5 caracteres, sin truncamientos sospechosos).
+
+**Riesgo o sesgo identificado:** El balance perfecto 50/50 es artificial
+(curado por los autores originales), no refleja la proporción real de
+opinión positiva/negativa en estas plataformas. Además, al tratarse de
+oraciones individuales extraídas de reseñas más largas, algunas pierden el
+contexto necesario para interpretar su sentimiento de forma aislada.
+
+**Decisión de aprobación o rechazo:** Aprobado. Cumple los seis criterios
+del manual (pertinencia, licencia, representatividad, calidad,
+reproducibilidad, riesgo) y el contrato de datos automatizado
+(`test_data_contract.py`) pasa 3/3 pruebas. Queda listo para los
+laboratorios siguientes de embeddings y entrenamiento de texto.
+
+**Limitación que debe comunicarse:** El lenguaje y las referencias del
+corpus corresponden a ~2015 o antes, por lo que puede no generalizar bien a
+texto o jerga actual. No incluye metadatos de usuario ni consentimiento
+explícito de los autores originales para fines de perfilado individual.
+
+**Siguiente verificación:** Antes de entrenar el primer modelo de texto,
+revisar si alguno de los 17 duplicados detectados cae simultáneamente en
+el conjunto de entrenamiento y en el de prueba (fuga de datos), y evaluar
+si el balance artificial 50/50 sigue siendo representativo una vez
+definida la partición real de train/test.
+
