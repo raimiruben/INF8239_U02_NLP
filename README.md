@@ -31,3 +31,23 @@ uv run streamlit run app/streamlit_app.py
 ## Interpretación
 
 Toda conclusión debe separar observación, evidencia, interpretación y decisión.
+
+## Correcciones aplicadas
+
+**Selección de modelo en `train_text.py` (LAB05).** El script original tenía
+`selected = models["logistic"]` fijo, por lo que la matriz de confusión, el
+análisis de errores y el modelo guardado (`models/text_model.joblib`)
+siempre correspondían a la regresión logística, sin importar cuál de los
+tres modelos obtuviera mejor F1 macro. En esta corrida, `naive_bayes`
+superó a `logistic` (F1 macro 0.822 vs 0.779), por lo que se corrigió la
+selección para que sea dinámica:
+
+```python
+best_name = max(predictions, key=lambda name: f1_score(y_test, predictions[name], average="macro"))
+selected = models[best_name]
+selected_pred = predictions[best_name]
+```
+
+Con este cambio, los artefactos generados (`reports/confusion_text.png`,
+`reports/error_analysis.csv`, `models/text_model.joblib`) corresponden
+siempre al modelo con mejor desempeño real, no a uno fijo de antemano.

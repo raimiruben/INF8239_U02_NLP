@@ -39,8 +39,10 @@ def main() -> None:
     reports.mkdir(exist_ok=True)
     models_dir.mkdir(exist_ok=True)
     pd.DataFrame(rows).sort_values("f1_macro", ascending=False).to_csv(reports / "text_metrics.csv", index=False)
-    selected = models["logistic"]
-    selected_pred = predictions["logistic"]
+    best_name = max(predictions, key=lambda name: f1_score(y_test, predictions[name], average="macro")) 
+    selected = models[best_name] 
+    selected_pred = predictions[best_name] 
+    print(f"\nModelo seleccionado automáticamente (mejor F1 macro): {best_name}")
     ConfusionMatrixDisplay.from_predictions(y_test, selected_pred, xticks_rotation=45, cmap="Blues")
     plt.tight_layout()
     plt.savefig(reports / "confusion_text.png", dpi=170)
