@@ -52,6 +52,22 @@ Con este cambio, los artefactos generados (`reports/confusion_text.png`,
 `reports/error_analysis.csv`, `models/text_model.joblib`) corresponden
 siempre al modelo con mejor desempeño real, no a uno fijo de antemano.
 
+**Archivo del modelo omitido en el commit sugerido (LAB05, Paso 10).** El
+comando de Git que indica el manual para el primer commit del Paso 10
+(`git add src scripts tests reports app README.md uv.lock`) no incluye la
+carpeta `models/`, por lo que `models/text_model.joblib` —el modelo
+entrenado que carga directamente la aplicación de Streamlit— quedó sin
+versionar. A diferencia de `data/raw/dataset.csv` (excluido a propósito de
+Git porque es reproducible mediante script), el modelo entrenado no se
+regenera automáticamente al desplegar la app, por lo que omitirlo rompería
+la aplicación en un entorno limpio o en la nube. Se agregó en un commit
+adicional:
+
+```bash
+git add models/text_model.joblib
+git commit -m "fix: include trained model artifact for Streamlit app"
+```
+
 ## Cierre interpretativo — Ejercicio 03
 
 Se entrenaron y compararon tres clasificadores de texto sobre el corpus
