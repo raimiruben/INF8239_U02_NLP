@@ -129,3 +129,19 @@ y (2) restringir o advertir explícitamente el uso del modelo a texto en
 inglés, dado que no existe ningún mecanismo de detección de idioma en el
 pipeline actual y el modelo falla silenciosamente —sin ninguna señal de baja
 confianza— ante texto en otros idiomas.
+
+## Cierre interpretativo — LAB06: embeddings y análisis responsable de redes
+
+**Resultado de embeddings.** Entrené Word2Vec (vector_size=60, window=5, min_count=1, epochs=30, seed=42, workers=1) sobre las 3 000 oraciones del corpus de sentimiento, con un vocabulario de 5 155 palabras. Los vecinos de "good" con window=5 mezclan adjetivos evaluativos (nice, friendly, clean, pretty, reasonable) con palabras de tema o nombres propios (salsa, functionality, watson, emily, noca), con similitudes entre 0,935 y 0,964. Al cambiar solo window a 2, los 10 vecinos pasaron a ser adjetivos evaluativos y desaparecieron los nombres propios, porque una ventana corta captura el contexto inmediato (la posición sintáctica) y no el tema de la oración.
+
+**Evidencia de cobertura.** La cobertura fue 1,0, pero no es una evidencia de calidad: con min_count=1 toda palabra del corpus entra al vocabulario, y la cobertura se mide sobre el mismo corpus con el que se entrenó. Además, incluir palabras de una sola aparición es lo que permite vecinos ruidosos como "noca".
+
+**Resultado estructural de la red.** La red del club de karate de Zachary tiene 34 nodos, 78 aristas y densidad ≈ 0,139 (calculada a mano; el script no la imprime). El algoritmo de modularidad voraz detectó 3 comunidades con modularidad 0,411. Un nodo es un miembro del club y una arista una relación registrada en el estudio original; el dataset no incluye el tipo de relación, el periodo ni el consentimiento.
+
+**Dos métricas comparadas.** Grado y betweenness. El nodo 33 tiene el mayor grado (0,515) y el nodo 0 la mayor betweenness (0,438), aunque el grado del nodo 0 es casi igual (0,485). El nodo 1 está en el top 5 de grado y PageRank pero no en el de betweenness; el nodo 31 está en el top 5 de betweenness pero no en los de grado ni PageRank.
+
+**Interpretación permitida.** El nodo 33 es el que tiene más conexiones directas, y el nodo 0 participa en más caminos mínimos entre otros nodos, lo que sugiere un papel de puente estructural en esta red. El nodo 31 es compatible con un puente que tiene pocas conexiones. En los embeddings, con una ventana corta, "good" queda cerca de palabras que ocupan su misma posición en la frase.
+
+**Interpretación que NO puede sostenerse.** Que los nodos 0 o 33 sean "los más influyentes" o líderes: las métricas miden estructura de conexiones, no influencia causal ni control real. Que las 3 comunidades sean grupos sociales reales: son la partición que devuelve el algoritmo en esta red. Que una similitud alta sea sinonimia: "bad" y "disappointed" quedaron cerca de "good" con window=2 porque comparten contexto, no polaridad. Y que la cobertura de 1,0 pruebe buena calidad, o que los vecinos valgan para otro corpus o idioma: es un corpus pequeño, una sola palabra y una sola semilla.
+
+**Siguiente experimento.** Cambiar min_count de 1 a 3, manteniendo window=5. Hipótesis: el vocabulario bajará de 5 155, la cobertura caerá por debajo de 1,0 y desaparecerán vecinos ruidosos como noca, emily y watson. Repetirlo con otras palabras (por ejemplo "bad" y "service") y otras semillas para ver si los vecinos son estables.
